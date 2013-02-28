@@ -1,4 +1,4 @@
-# Emmet for Sublime Text 2 plugin
+# Ammat is the AliMDalize of Emmet for One Developers
 
 Official [Emmet](http://emmet.io) plugin (previously called _Zen Coding_) for Sublime Text 2.
 
