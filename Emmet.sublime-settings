@@ -101,6 +101,6 @@
 	// http://docs.emmet.io/customization/syntax-profiles/
 	"syntaxProfiles": {
 		// Enable XHTML dialect for HTML syntax
-		// "html": "xhtml"
+		"html": "xhtml"
 	}
 }
