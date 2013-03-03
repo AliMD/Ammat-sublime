@@ -63,6 +63,9 @@
 			"pos:a": "position:absolute;",
 			"pos:r": "position:relative;",
 			"pos:f": "position:fixed;",
+			"pa": "pos:a",
+			"pf": "pos:f",
+			"por": "pos:r",
 			"t": "top:|;",
 			"t:a": "top:auto;",
 			"r": "right:|;",
@@ -301,7 +304,7 @@
 			"bgc:t": "background-color:transparent;",
 			"bgi": "background-image:url(|);",
 			"bgi:n": "background-image:none;",
-			"bgr": "background-repeat:|;",
+			"bgr": "background-repeat:${1:no-repeat};",
 			"bgr:n": "background-repeat:no-repeat;",
 			"bgr:x": "background-repeat:repeat-x;",
 			"bgr:y": "background-repeat:repeat-y;",
@@ -343,7 +346,7 @@
 			"cnt:a": "content:attr(|);",
 			"cnt:c": "content:counter(|);",
 			"cnt:cs": "content:counters(|);",
-
+			"dr": "direction: ${1:rtl}",
 
 			"tbl": "table-layout:|;",
 			"tbl:a": "table-layout:auto;",
@@ -354,12 +357,14 @@
 			"ec": "empty-cells:|;",
 			"ec:s": "empty-cells:show;",
 			"ec:h": "empty-cells:hide;",
+			"lst": "list-style-type:${1:none};"
+			"lstn": "list-style-type:none;"
 			"lis": "list-style:|;",
 			"lis:n": "list-style:none;",
 			"lisp": "list-style-position:|;",
 			"lisp:i": "list-style-position:inside;",
 			"lisp:o": "list-style-position:outside;",
-			"list": "list-style-type:|;",
+			"list": "list-style-type:${1:none};",
 			"list:n": "list-style-type:none;",
 			"list:d": "list-style-type:disc;",
 			"list:c": "list-style-type:circle;",
@@ -370,6 +375,7 @@
 			"list:ur": "list-style-type:upper-roman;",
 			"lisi": "list-style-image:|;",
 			"lisi:n": "list-style-image:none;",
+			"ls": "letter-spacing:|;"
 			"q": "quotes:|;",
 			"q:n": "quotes:none;",
 			"q:ru": "quotes:'\\00AB' '\\00BB' '\\201E' '\\201C';",
@@ -595,7 +601,7 @@
 		"filters": "html",
 		"profile": "html",
 		"snippets": {
-			"!!!":    "<!doctype html>",
+			"!!!":    "<!DOCTYPE html>",
 			"!!!4t":  "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>",
 			"!!!4s":  "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01//EN' 'http://www.w3.org/TR/html4/strict.dtd'>",
 			"!!!xt":  "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>",
@@ -605,9 +611,11 @@
 			"c": "<!-- |${child} -->",
 			"cc:ie6": "<!--[if lte IE 6]>\n\t${child}|\n<![endif]-->",
 			"cc:ie": "<!--[if IE]>\n\t${child}|\n<![endif]-->",
-			"cc:noie": "<!--[if !IE]><!-->\n\t${child}|\n<!--<![endif]-->"
+			"cc:noie": "<!--[if !IE]><!-->\n\t${child}|\n<!--<![endif]-->",
+
+			"style": "<style type=\"text/css\">\n\t${child}|\n</style>"
 		},
-		
+
 		"abbreviations": {
 			"a": "<a href=''>",
 			"a:link": "<a href='http://|'>",
@@ -630,7 +638,6 @@
 			"meta:win": "<meta http-equiv='Content-Type' content='text/html;charset=windows-1251' />",
 			"meta:vp": "<meta name='viewport' content='width=${1:device-width}, user-scalable=${2:no}, initial-scale=${3:1.0}, maximum-scale=${4:1.0}, minimum-scale=${5:1.0}' />",
 			"meta:compat": "<meta http-equiv='X-UA-Compatible' content='${1:IE=Edge,chrome=1}'>",
-			"style": "<style type='text/css'>",
 			"script": "<script type='text/javascript'>",
 			"script:src": "<script type='text/javascript' src=''>",
 			"img": "<img src='' alt='' />",
@@ -648,9 +655,9 @@
 			"form:get": "<form action='' method='get'>",
 			"form:post": "<form action='' method='post'>",
 			"label": "<label for=''>",
-			"input": "<input type='${1:text}' />",
-			"inp": "<input type='${1:text}' name='' id='' />",
-			"input:hidden": "input[type=hidden name]",
+			"input": "<input type='${1:text}' name='${2:}' id='${2:}' />",
+			"input:text": "input[type=text]",
+			"input:hidden": "input[type=hidden]",
 			"input:search": "inp[type=search]",
 			"input:email": "inp[type=email]",
 			"input:url": "inp[type=url]",
@@ -712,17 +719,30 @@
 			"btn:b": "button[type=button]",
 			"btn:r": "button[type=reset]",
 			"btn:s": "button[type=submit]",
+			"inp": "input",
 			"input:h": "input:hidden",
-			"input:text": "inp",
-			"input:t": "inp",
+			"input:t": "input:text",
 			"input:pass": "input:password",
 			"input:p": "input:password",
 			"input:b": "input:button",
 			"input:i": "input:image",
+			"input:img": "input:image",
 			"input:s": "input:submit",
 			"input:c": "input:checkbox",
 			"input:r": "input:radio",
 			"input:f": "input:file",
+			"inph": "input:hidden",
+			"inpt": "input:text",
+			"inpp": "input:password",
+			"inpb": "input:button",
+			"inpi": "input:image",
+			"inpimg": "input:image",
+			"inps": "input:submit",
+			"inpc": "input:checkbox",
+			"inpr": "input:radio",
+			"inpf": "input:file",
+			"inpfl": "input:file",
+
 			"menu:c": "menu:context",
 			"menu:t": "menu:toolbar",
 			"optg": "optgroup",
@@ -754,7 +774,7 @@
 			"html:xs":  "!!!xs+doc4[xmlns=http://www.w3.org/1999/xhtml xml:lang=${lang}]",
 			"html:xxs": "!!!xxs+doc4[xmlns=http://www.w3.org/1999/xhtml xml:lang=${lang}]",
 			"html:5":   "!!!+doc[lang=${lang}]",
-			
+
 			"!4t": "html:4t",
 			"!4s": "html:4s",
 			"!xt": "html:xt",
@@ -775,7 +795,7 @@
 			"optg+": "optgroup>option"
 		}
 	},
-	
+
 	"xml": {
 		"extends": "html",
 		"profile": "xml",
