@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 
 import re
+import imp
 import json
 import sys
 import os.path
@@ -16,7 +17,7 @@ sys.path += [BASE_PATH] + [os.path.join(BASE_PATH, f) for f in ['emmet_completio
 
 # Make sure all dependencies are reloaded on upgrade
 if 'emmet.reloader' in sys.modules:
-	reload(sys.modules['emmet.reloader'])
+	imp.reload(sys.modules['emmet.reloader'])
 import emmet.reloader
 
 # import completions as cmpl
@@ -54,6 +55,8 @@ def js_file_reader(file_path, use_unicode=True):
 				break
 
 		rel_path = rel_path.replace('.sublime-package', '')
+		# for Windows we have to replace slashes
+		rel_path = rel_path.replace('\\', '/')
 		return sublime.load_resource(rel_path)
 
 	return _js_file_reader(file_path, use_unicode)
@@ -122,6 +125,9 @@ class SublimeLoaderDelegate(LoaderDelegate):
 		self.state = 'loading'
 
 	def on_progress(self, *args, **kwargs):
+		if kwargs['progress'].is_background:
+			return
+
 		before = self.i % self.size
 		after = (self.size - 1) - before
 		msg = '%s [%s=%s]' % (self.message, ' ' * before, ' ' * after)
@@ -135,6 +141,10 @@ class SublimeLoaderDelegate(LoaderDelegate):
 
 	def on_complete(self, *args, **kwargs):
 		self.state = 'complete'
+
+		if kwargs['progress'].is_background:
+			return
+
 		sublime.set_timeout(lambda: sublime.status_message('PyV8 binary successfully loaded'), 0)
 
 	def on_error(self, exit_code=-1, thread=None):
@@ -260,11 +270,16 @@ def should_handle_tab_key(syntax=None):
 		return True
 
 	abbr = ctx.js().locals.pyExtractAbbreviation()
-	if not re.match(r'^[\w\:%]+$', abbr):
+
+	disabled_snippets = settings.get('disabled_single_snippets', '').split()
+	if disabled_snippets and abbr in disabled_snippets:
+		return False
+
+	if not re.match(r'^[\w\-\:%]+$', abbr):
 		# it's a complex expression
 		return True
 
-	if re.match(r'^(lorem|lipsum)\d*$', abbr):
+	if re.match(r'^(lorem|lipsum)([a-z]{2})?\d*$', abbr):
 		# hardcoded Lorem Ipsum generator
 		return True
 
@@ -500,6 +515,8 @@ class CommandsAsYouTypeBase(sublime_plugin.TextCommand):
 				if view.substr(trailing).isspace():
 					view.erase(edit, trailing)
 
+		if not is_python3:
+			processed_input = processed_input.decode('utf-8')
 		view.run_command('insert_snippet', { 'contents': processed_input })
 
 	def on_panel_change(self, abbr):
